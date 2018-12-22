@@ -1,0 +1,12 @@
+body {
+  color: #000;
+  background: rgba(255, 255, 255, 1) + rgba(255, 0, 0, 0.5) + rgba(0, 0, 255, 0.5) url("../img/bg.png") repeat-x; /*add*/
+}
+
+.a {
+  color: rgba(255, 255, 255, 1) + rgba(0, 0, 255, 0.5) + rgba(255, 0, 0, 0.5); /*add*/
+}
+
+.b {
+  color: rgba(255, 255, 255, 0.3); /*add*/
+}

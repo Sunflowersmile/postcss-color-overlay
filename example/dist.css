@@ -1,0 +1,12 @@
+body {
+  color: #000;
+  background: rgba(128, 64, 191, 1) url("../img/bg.png") repeat-x;
+}
+
+.a {
+  color: rgba(191, 64, 128, 1);
+}
+
+.b {
+  color: rgba(255, 255, 255, 0.3);
+}
