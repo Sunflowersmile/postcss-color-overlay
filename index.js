@@ -1,102 +1,111 @@
-var postcss = require('postcss');
-var objectAssign = require('object-assign');
+var postcss = require('postcss')
+var objectAssign = require('object-assign')
+
+var propsList = [
+  'background',
+  'background-color',
+  'border',
+  'border-left',
+  'border-right',
+  'border-top',
+  'border-bottom',
+  'border-color',
+  'border-left-color',
+  'border-right-color',
+  'border-top-color',
+  'border-bottom-color',
+  'color',
+  'box-shadow',
+  '-webkit-box-shadow',
+  '-moz-box-shadow'
+]
 
 var defaultOptions = {
-  sign: 'coloroverlay' // 标识符，标识符前的值将会被解析
-};
+  disabled: false, // 是否禁用插件
+  include: [], // 包含在运算范围内的css属性
+  exclude: [] // 不包含在运算范围内的css属性（优先级高于include）
+}
 
 module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
-  opts = opts || {};
+  opts = opts || {}
 
-  opts = objectAssign({}, defaultOptions, opts);
+  opts = objectAssign({}, defaultOptions, opts)
+
+  propsList = propsList.concat(opts.include)
 
   function calculate (bottom, top) {
-    // var exp = /^rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\)$/;
-    var contentExp = /rgba\((.+)\)/;
+    var contentExp = /rgba\((.+)\)/
+    var topStr = top.replace(/\s+/g, '').match(contentExp)[1]
+    var bottomStr = bottom.replace(/\s+/g, '').match(contentExp)[1]
+    var topArr = topStr.split(',')
+    var bottomArr = bottomStr.split(',')
 
-    // if (exp.test(top) && exp.test(bottom)) {
-      var topStr = top.replace(/\s+/g, '').match(contentExp)[1];
-      var bottomStr = bottom.replace(/\s+/g, '').match(contentExp)[1];
+    var r, b, g, a, r1, b1, g1, a1, r2, b2, g2, a2
 
-      var topArr = topStr.split(',');
-      var bottomArr = bottomStr.split(',');
+    r1 = parseFloat(bottomArr[0])
+    g1 = parseFloat(bottomArr[1])
+    b1 = parseFloat(bottomArr[2])
+    a1 = parseFloat(bottomArr[3])
+    r2 = parseFloat(topArr[0])
+    g2 = parseFloat(topArr[1])
+    b2 = parseFloat(topArr[2])
+    a2 = parseFloat(topArr[3])
 
-      var r, b, g, a, r1, b1, g1, a1, r2, b2, g2, a2;
+    a = a1 + a2 - a1 * a2
+    r = (r1 * a1 + r2 * a2 - r1 * a1 * a2) / a
+    g = (g1 * a1 + g2 * a2 - g1 * a1 * a2) / a
+    b = (b1 * a1 + b2 * a2 - b1 * a1 * a2) / a
 
-      r1 = parseFloat(bottomArr[0]);
-      g1 = parseFloat(bottomArr[1]);
-      b1 = parseFloat(bottomArr[2]);
-      a1 = parseFloat(bottomArr[3]);
-      r2 = parseFloat(topArr[0]);
-      g2 = parseFloat(topArr[1]);
-      b2 = parseFloat(topArr[2]);
-      a2 = parseFloat(topArr[3]);
-
-      a = a1 + a2 - a1 * a2;
-      r = (r1 * a1 + r2 * a2 - r1 * a1 * a2) / a;
-      g = (g1 * a1 + g2 * a2 - g1 * a1 * a2) / a;
-      b = (b1 * a1 + b2 * a2 - b1 * a1 * a2) / a;
-
-      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
-
-    // }
-
-    // return false;
+    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')'
   }
 
   function formatColor (color) {
-    var contentExp = /rgba\((.+)\)/;
+    var contentExp = /rgba\((.+)\)/
 
-    color = color.replace(/\s+/g, '').match(contentExp)[1];
+    color = color.replace(/\s+/g, '').match(contentExp)[1]
 
-    var colorArr = color.split(',');
+    var colorArr = color.split(',')
 
     return 'rgba(' +
       Number(colorArr[0]).toFixed(0) + ', ' +
       Number(colorArr[1]).toFixed(0) + ', ' +
       Number(colorArr[2]).toFixed(0) + ', ' +
       Number(Number(colorArr[3]).toFixed(2)) +
-      ')';
+      ')'
   }
 
   // Work with options here
 
-  return function (root, result) {
-
+  return function (root) {
     // Transform CSS AST here
+    if (opts.disabled) {
+      return false
+    }
 
-    root.walkComments(function (comment) {
+    root.walkDecls(function (decl) {
+      var key = decl.prop
+      var value = decl.value
 
-      if (comment.text === opts.sign) {
-        var value = comment.prev().value;
-
-        var exp = /((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))\s*\+\s*)+(rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))/g;
-
-        var currentArr = value.match(exp);
+      if (~propsList.indexOf(key) && !(~opts.exclude.indexOf(key))) {
+        var exp = /((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))\s*\+\s*)+(rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))/g
+        var currentArr = value.match(exp)
 
         if (currentArr && currentArr.length) {
           currentArr.forEach(function (item) {
+            var colorArr = item.replace(/\s+/g, '').split('+')
+            var currentColor = colorArr.shift()
 
-            var colorArr = item.replace(/\s+/g, '').split('+');
+            while (colorArr.length) {
+              var nextColor = colorArr.shift()
 
-            var currentColor = colorArr.shift();
-
-            while(colorArr.length) {
-              var nextColor = colorArr.shift();
-
-              currentColor = calculate(currentColor, nextColor);
+              currentColor = calculate(currentColor, nextColor)
             }
 
-
-            comment.prev().value = comment.prev().value.replace(item, formatColor(currentColor));
-          });
+            decl.value = decl.value
+              .replace(item, formatColor(currentColor))
+          })
         }
-
-
-        comment.remove();
       }
-
-    });
-
+    })
   }
 })

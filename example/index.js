@@ -3,7 +3,9 @@ var fs = require('fs');
 var coloroverlay = require('..');
 
 var options = {
-  sign: 'add'
+  disabled: false, // 是否禁用插件
+  include: ['color'], // 包含在运算范围内的css属性
+  exclude: ['color'] // 不包含在运算范围内的css属性（优先级高于include）
 };
 
 var css = fs.readFileSync('main.css', 'utf8');
@@ -14,5 +16,5 @@ fs.writeFile('dist.css', processeedCss, function (err) {
   if (err) {
     throw err;
   }
-  console.log('color overlay file written.');
+  console.log('done.');
 });
