@@ -9,7 +9,8 @@
     "color calculator"
   ],
   "scripts": {
-    "test": "jest && eslint *.js"
+    "test": "jest && eslint *.js",
+    "release": "release-it"
   },
   "author": "fan <lifan06@58ganji.com>",
   "license": "MIT",
