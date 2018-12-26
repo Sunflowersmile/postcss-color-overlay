@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Sunflowersmile/postcss-color-overlay",
   "dependencies": {
+    "object-assign": "^4.1.1",
     "postcss": "^7.0.6"
   },
   "devDependencies": {
@@ -33,10 +34,19 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-standard": "^4.0.0",
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "release-it": "^9.3.0"
   },
   "eslintConfig": {
-    "extends": "eslint-config-postcss/es5"
+    "extends": "eslint-config-postcss/es5",
+    "rules": {
+      "security/detect-unsafe-regex": "off",
+      "max-len": [
+        2,
+        300,
+        4
+      ]
+    }
   },
   "jest": {
     "testEnvironment": "node"

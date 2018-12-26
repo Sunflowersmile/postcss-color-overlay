@@ -82,7 +82,7 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
       return false
     }
 
-    root.walkDecls(function (decl) {
+    return root.walkDecls(function (decl) {
       var key = decl.prop
       var value = decl.value
 
