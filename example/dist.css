@@ -1,5 +1,5 @@
 .foo {
-  color: rgba(255, 255, 255, 1) + rgba(255, 0, 0, 0.5);
+  color: rgba(255, 128, 128, 1);
   background: rgba(128, 64, 191, 1) url("../img/bg.png") repeat-x;
   box-shadow:
     0 0 5px 3px rgba(73, 182, 0, 0.84),
