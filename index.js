@@ -98,8 +98,7 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
             var colorArr = []
             if (opts.divide) {
               colorArr = item.replace(/\s+/g, '').split('+')
-            }
-            else {
+            } else {
               colorArr = item.replace(/\s+/g, '').replace(/rgba/g, '|rgba').split('|')
               colorArr.shift()
             }
