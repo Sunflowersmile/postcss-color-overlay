@@ -1,6 +1,6 @@
 {
   "name": "postcss-color-overlay",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "PostCSS plugin is used to calculte color overlay. The color mode must be RGBA.",
   "keywords": [
     "postcss",
