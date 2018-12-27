@@ -39,8 +39,7 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
 
     top = hexadecimalExp.test(top) ? hexadecimalToRGBA(top) : top
     bottom = hexadecimalExp.test(bottom) ? hexadecimalToRGBA(bottom) : bottom
-console.log(top)
-    console.log(bottom)
+
     var contentExp = /rgba\((.+)\)/
     var topStr = top.replace(/\s+/g, '').match(contentExp)[1]
     var bottomStr = bottom.replace(/\s+/g, '').match(contentExp)[1]
