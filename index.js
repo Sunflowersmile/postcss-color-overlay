@@ -22,6 +22,7 @@ var propsList = [
 
 var defaultOptions = {
   disabled: false, // 是否禁用插件
+  divide: true,
   include: [], // 包含在运算范围内的css属性
   exclude: [] // 不包含在运算范围内的css属性（优先级高于include）
 }
@@ -87,12 +88,22 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
       var value = decl.value
 
       if (~propsList.indexOf(key) && !(~opts.exclude.indexOf(key))) {
-        var exp = /((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))\s*\+\s*)+(rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))/g
-        var currentArr = value.match(exp)
+        var exp1 = /((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))\s*\+\s*)+(rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))/g
+        var exp2 = /(rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\)){2,}/g
+
+        var currentArr = opts.divide ? value.match(exp1) : value.match(exp2)
 
         if (currentArr && currentArr.length) {
           currentArr.forEach(function (item) {
-            var colorArr = item.replace(/\s+/g, '').split('+')
+            var colorArr = []
+            if (opts.divide) {
+              colorArr = item.replace(/\s+/g, '').split('+')
+            }
+            else {
+              colorArr = item.replace(/\s+/g, '').replace(/rgba/g, '|rgba').split('|')
+              colorArr.shift()
+            }
+
             var currentColor = colorArr.shift()
 
             while (colorArr.length) {

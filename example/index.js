@@ -4,8 +4,9 @@ var coloroverlay = require('..');
 
 var options = {
   disabled: false, // 是否禁用插件
-  include: ['color'], // 包含在运算范围内的css属性
-  exclude: ['color'] // 不包含在运算范围内的css属性（优先级高于include）
+  divide: true, // 是否需要分隔符
+  include: [], // 包含在运算范围内的css属性
+  exclude: [] // 不包含在运算范围内的css属性（优先级高于include）
 };
 
 var css = fs.readFileSync('main.css', 'utf8');

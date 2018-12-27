@@ -143,3 +143,31 @@ it('should not handle the color if the props was included both exclude and inclu
     )
   }
 )
+
+it('should handle only color write together if the props divide is false',
+  function () {
+    return run(
+      '.foo {' +
+      '  color: rgba(255, 255, 255, 1)rgba(255, 0, 0, 0.5);' +
+      '  background:' +
+      ' rgba(255, 255, 255, 1)rgba(255, 0, 0, 0.5)rgba(0, 0, 255, 0.5)' +
+      ' url("../img/bg.png") repeat-x;' +
+      '  box-shadow:' +
+      '    0 0 5px 3px rgba(255, 0, 0, 0.6) + rgba(0, 255, 0, 0.6),' +
+      '    0 0 5px 6px rgba(0, 182, 0, 0.6) + rgba(0, 255, 0, 0.6),' +
+      '    0 0 5px 10px rgba(255, 255, 0, 0.6);' +
+      '}',
+      '.foo {' +
+      '  color: rgba(255, 128, 128, 1);' +
+      '  background: rgba(128, 64, 191, 1) url("../img/bg.png") repeat-x;' +
+      '  box-shadow:' +
+      '    0 0 5px 3px rgba(255, 0, 0, 0.6) + rgba(0, 255, 0, 0.6),' +
+      '    0 0 5px 6px rgba(0, 182, 0, 0.6) + rgba(0, 255, 0, 0.6),' +
+      '    0 0 5px 10px rgba(255, 255, 0, 0.6);' +
+      '}',
+      {
+        divide: false
+      }
+    )
+  }
+)

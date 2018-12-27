@@ -24,11 +24,30 @@
 }
 ```
 
+```css
+/*divide选项为false*/
+.foo {
+    /* Input example */
+    color: rgba(255, 255, 255, 1)rgba(255, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 1)rgba(255, 0, 0, 0.5)rgba(0, 0, 255, 0.5) url("../img/bg.png") repeat-x;
+}
+```
+
+```css
+/*divide选项为false*/
+.foo {
+  /* Output example */
+  color: rgba(255, 128, 128, 1);
+  background: rgba(128, 64, 191, 1) url("../img/bg.png") repeat-x;
+}
+```
+
 ## Usage
 
 ```js
 var options = {
   disabled: false, // 是否禁用该插件
+  divide: true, // 色值之间是否使用分隔符"+"号，该选项在与scss一起使用时，可防止scss语法检查报错
   include: [], // 包含在运算范围内的css属性
   exclude: [] // 不包含在运算范围内的css属性（优先级最高）
 };
