@@ -12,6 +12,7 @@
 .foo {
     /* Input example */
     color: rgba(255, 255, 255, 1) + rgba(255, 0, 0, 0.5);
+    border-color: #FFF + rgba(255, 0, 0, 0.5);
     background: rgba(255, 255, 255, 1) + rgba(255, 0, 0, 0.5) + rgba(0, 0, 255, 0.5) url("../img/bg.png") repeat-x;
 }
 ```
@@ -20,6 +21,7 @@
 .foo {
   /* Output example */
   color: rgba(255, 128, 128, 1);
+  border-color: rgba(255, 128, 128, 1);
   background: rgba(128, 64, 191, 1) url("../img/bg.png") repeat-x;
 }
 ```
@@ -28,8 +30,9 @@
 /*divide选项为false*/
 .foo {
     /* Input example */
-    color: rgba(255, 255, 255, 1)rgba(255, 0, 0, 0.5);
-    background: rgba(255, 255, 255, 1)rgba(255, 0, 0, 0.5)rgba(0, 0, 255, 0.5) url("../img/bg.png") repeat-x;
+    color: rgba(255, 255, 255, 1) rgba(255, 0, 0, 0.5);
+    border-color: #FFF rgba(255, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 1) rgba(255, 0, 0, 0.5) rgba(0, 0, 255, 0.5) url("../img/bg.png") repeat-x;
 }
 ```
 
@@ -38,6 +41,7 @@
 .foo {
   /* Output example */
   color: rgba(255, 128, 128, 1);
+  border-color: rgba(255, 128, 128, 1);
   background: rgba(128, 64, 191, 1) url("../img/bg.png") repeat-x;
 }
 ```

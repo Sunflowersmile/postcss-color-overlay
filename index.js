@@ -34,7 +34,13 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
 
   propsList = propsList.concat(opts.include)
 
-  function calculate (bottom, top) {
+  var calculate = function (bottom, top) {
+    var hexadecimalExp = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
+
+    top = hexadecimalExp.test(top) ? hexadecimalToRGBA(top) : top
+    bottom = hexadecimalExp.test(bottom) ? hexadecimalToRGBA(bottom) : bottom
+console.log(top)
+    console.log(bottom)
     var contentExp = /rgba\((.+)\)/
     var topStr = top.replace(/\s+/g, '').match(contentExp)[1]
     var bottomStr = bottom.replace(/\s+/g, '').match(contentExp)[1]
@@ -60,7 +66,29 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
     return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')'
   }
 
-  function formatColor (color) {
+  var hexadecimalToRGBA = function (hex) {
+    hex = hex.substr(1).toUpperCase();
+
+    var r, g, b;
+
+    switch (hex.length) {
+      case 3:
+        r = hex[0] + hex[0]
+        g = hex[1] + hex[1]
+        b = hex[2] + hex[2]
+        break
+      case 6:
+        r = hex.substr(0,2)
+        g = hex.substr(2,2)
+        b = hex.substr(4,2)
+        break
+    }
+
+    return 'rgba(' + parseInt(r, 16) + ', ' + parseInt(g, 16) + ', ' + parseInt(b, 16) + ', 1)';
+  }
+
+
+  var formatColor = function (color) {
     var contentExp = /rgba\((.+)\)/
 
     color = color.replace(/\s+/g, '').match(contentExp)[1]
@@ -88,8 +116,8 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
       var value = decl.value
 
       if (~propsList.indexOf(key) && !(~opts.exclude.indexOf(key))) {
-        var exp1 = /((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))\s*\+\s*)+(rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))/g
-        var exp2 = /((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))\s*)+(rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))/g
+        var exp1 = /(((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))|(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))\s*\+\s*)+((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))|(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))/g
+        var exp2 = /(((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))|(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))\s*)+((rgba\(((([0-9]{1})|([1-9]{1}[0-9]{1})|(1[0-9]{2})|(2[0-4]{1}[0-9]{1})|(25[0-5]{1})),\s*){3}(0|1|(0\.[0-9]{1,2}))\))|(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))/g
 
         var currentArr = opts.divide ? value.match(exp1) : value.match(exp2)
 
@@ -99,7 +127,7 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
             if (opts.divide) {
               colorArr = item.replace(/\s+/g, '').split('+')
             } else {
-              colorArr = item.replace(/\s+/g, '').replace(/rgba/g, '|rgba').split('|')
+              colorArr = item.replace(/\s+/g, '').replace(/(#|rgba)/g, '|$1').split('|')
               colorArr.shift()
             }
 

@@ -8,9 +8,9 @@
 }
 
 .foo {
-  color: #333333 + #AFAFAF;
+  color: rgba(153, 26, 26, 1);
   border: 1px solid rgba(255, 128, 128, 1);
-  background-color: rgba(255, 255, 255, 0.1) + #999;
+  background-color: rgba(153, 153, 153, 1);
 }
 
 .foo {

@@ -21,6 +21,7 @@ it('should handle colors overlay more than two', function () {
   return run(
     '.foo {' +
     ' color: rgba(255, 255, 255, 1) + rgba(255, 0, 0, 0.5);' +
+    ' border-color: #FFF + rgba(255, 0, 0, 0.5);' +
     ' background:' +
     ' rgba(255, 255, 255, 1) + rgba(255, 0, 0, 0.5) + rgba(0, 0, 255, 0.5)' +
     ' url("../img/bg.png") repeat-x;' +
@@ -31,6 +32,7 @@ it('should handle colors overlay more than two', function () {
     '}',
     '.foo {' +
     ' color: rgba(255, 128, 128, 1);' +
+    ' border-color: rgba(255, 128, 128, 1);' +
     ' background: rgba(128, 64, 191, 1) url("../img/bg.png") repeat-x;' +
     ' box-shadow:' +
     ' 0 0 5px 3px rgba(73, 182, 0, 0.84),' +
@@ -41,21 +43,6 @@ it('should handle colors overlay more than two', function () {
   )
 })
 
-it('should handle the color just be RGBA mode', function () {
-  return run(
-    '.foo {' +
-    ' color: #333333 + #AFAFAF;' +
-    ' border: 1px solid rgba(255, 255, 255, 1) + rgba(255, 0, 0, 0.5);' +
-    ' background-color: rgba(255, 255, 255, 0.1) + #999;' +
-    '}',
-    '.foo {' +
-    ' color: #333333 + #AFAFAF;' +
-    ' border: 1px solid rgba(255, 128, 128, 1);' +
-    ' background-color: rgba(255, 255, 255, 0.1) + #999;' +
-    '}',
-    { }
-  )
-})
 
 it('should not handle the color if the options disabled is true', function () {
   return run(
@@ -148,9 +135,9 @@ it('should handle only color write together if the props divide is false',
   function () {
     return run(
       '.foo {' +
-      '  color: rgba(255, 255, 255, 1)rgba(255, 0, 0, 0.5);' +
+      '  color: #FFF rgba(255, 0, 0, 0.5);' +
       '  background:' +
-      ' rgba(255, 255, 255, 1)rgba(255, 0, 0, 0.5)rgba(0, 0, 255, 0.5)' +
+      ' rgba(255, 255, 255, 1) rgba(255, 0, 0, 0.5) rgba(0, 0, 255, 0.5)' +
       ' url("../img/bg.png") repeat-x;' +
       '  box-shadow:' +
       '    0 0 5px 3px rgba(255, 0, 0, 0.6) + rgba(0, 255, 0, 0.6),' +
