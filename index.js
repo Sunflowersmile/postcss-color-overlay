@@ -34,7 +34,7 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
 
   propsList = propsList.concat(opts.include)
 
-  var calculate = function (bottom, top) {
+  function calculate (bottom, top) {
     var hexadecimalExp = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
 
     top = hexadecimalExp.test(top) ? hexadecimalToRGBA(top) : top
@@ -65,10 +65,10 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
     return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')'
   }
 
-  var hexadecimalToRGBA = function (hex) {
-    hex = hex.substr(1).toUpperCase();
+  function hexadecimalToRGBA (hex) {
+    hex = hex.substr(1).toUpperCase()
 
-    var r, g, b;
+    var r, g, b
 
     switch (hex.length) {
       case 3:
@@ -77,17 +77,16 @@ module.exports = postcss.plugin('postcss-color-overlay', function (opts) {
         b = hex[2] + hex[2]
         break
       case 6:
-        r = hex.substr(0,2)
-        g = hex.substr(2,2)
-        b = hex.substr(4,2)
+        r = hex.substr(0, 2)
+        g = hex.substr(2, 2)
+        b = hex.substr(4, 2)
         break
     }
 
-    return 'rgba(' + parseInt(r, 16) + ', ' + parseInt(g, 16) + ', ' + parseInt(b, 16) + ', 1)';
+    return 'rgba(' + parseInt(r, 16) + ', ' + parseInt(g, 16) + ', ' + parseInt(b, 16) + ', 1)'
   }
 
-
-  var formatColor = function (color) {
+  function formatColor (color) {
     var contentExp = /rgba\((.+)\)/
 
     color = color.replace(/\s+/g, '').match(contentExp)[1]

@@ -43,7 +43,6 @@ it('should handle colors overlay more than two', function () {
   )
 })
 
-
 it('should not handle the color if the options disabled is true', function () {
   return run(
     '.a {' +
